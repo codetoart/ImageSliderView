@@ -1,29 +1,47 @@
 # ImageSliderView
 
-[![CI Status](http://img.shields.io/travis/Mahavir Jain/ImageSliderView.svg?style=flat)](https://travis-ci.org/Mahavir Jain/ImageSliderView)
-[![Version](https://img.shields.io/cocoapods/v/ImageSliderView.svg?style=flat)](http://cocoapods.org/pods/ImageSliderView)
-[![License](https://img.shields.io/cocoapods/l/ImageSliderView.svg?style=flat)](http://cocoapods.org/pods/ImageSliderView)
-[![Platform](https://img.shields.io/cocoapods/p/ImageSliderView.svg?style=flat)](http://cocoapods.org/pods/ImageSliderView)
+ImageSliderView is a UIView subclass to display multiple images from a remote data source in a horizantal scroll view. Images can be viewed in fullscreen by tapping on it.
 
-## Example
+## Getting Started
 
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
-## Requirements
+### Prerequisites
 
-## Installation
+* [Swift 2.3](https://swift.org/) - Swift version used
+* [Xcode 8](https://developer.apple.com/xcode/) - Xcode version used
+
+### Installing
 
 ImageSliderView is available through [CocoaPods](http://cocoapods.org). To install
 it, simply add the following line to your Podfile:
 
 ```ruby
-pod "ImageSliderView"
+pod 'ImageSliderView', :git => 'git@github.com:codetoart/ImageSliderView.git'
 ```
 
-## Author
+## Built With
 
-Mahavir Jain, mahavir.jain@mobisys.in
+* [Swift 2.3](https://swift.org/) - Swift version used
+* [Xcode 8](https://developer.apple.com/xcode/) - Xcode version used
+
+## Versioning
+
+For the versions available, see the [tags on this repository](https://github.com/codetoart/ImageSliderView/tags). 
+
+## Authors
+
+* **Priyank Tiwari**
 
 ## License
 
-ImageSliderView is available under the MIT license. See the LICENSE file for more info.
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+
+## Acknowledgments
+
+* Hat tip to anyone who's code was used
+* Inspiration
+* etc
+
+0
+
