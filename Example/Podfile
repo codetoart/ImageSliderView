@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'ImageSliderView_Example' do
+  pod 'ImageSliderView', :path => '../'
+
+  target 'ImageSliderView_Tests' do
+    inherit! :search_paths
+
+    pod 'FBSnapshotTestCase'
+  end
+end
