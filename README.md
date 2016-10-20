@@ -42,5 +42,3 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 * [AsyncImageView](https://github.com/nicklockwood/AsyncImageView)
 * [SnapKit](http://snapkit.io/)
 
-0
-
