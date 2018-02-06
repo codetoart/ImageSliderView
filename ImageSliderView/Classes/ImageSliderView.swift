@@ -11,25 +11,25 @@ import SnapKit
 import AsyncImageView
 
 public protocol ImageSliderViewDelegate: class {
-    func didTapImage(index: Int)
+    func didTapImage(_ index: Int)
 }
 
 public protocol ImageSliderViewDataSource: class {
     func numberOfImages() -> Int?
-    func imageURLFor(index: Int) -> NSURL?
+    func imageURLFor(_ index: Int) -> URL?
 }
 
-public class ImageSliderView: UIView {
+open class ImageSliderView: UIView {
 
-    public var viewMode: UIViewContentMode = .ScaleAspectFit
-    public var allowFullscreenOnTap = true
-    public var font: UIFont = UIFont.systemFontOfSize(15)
-    public weak var dataSource: ImageSliderViewDataSource?
-    public weak var delegate: ImageSliderViewDelegate?
+    open var viewMode: UIViewContentMode = .scaleAspectFit
+    open var allowFullscreenOnTap = true
+    open var font: UIFont = UIFont.systemFont(ofSize: 15)
+    open weak var dataSource: ImageSliderViewDataSource?
+    open weak var delegate: ImageSliderViewDelegate?
     
-    private var scrollView: UIScrollView?
-    private var pageControl: UIPageControl?
-    private var imageURLArray = Array<NSURL>()
+    fileprivate var scrollView: UIScrollView?
+    fileprivate var pageControl: UIPageControl?
+    fileprivate var imageURLArray = Array<URL>()
     
     /*
     // Only override drawRect: if you perform custom drawing.
@@ -49,14 +49,14 @@ public class ImageSliderView: UIView {
         setup()
     }
     
-    override public func awakeFromNib() {
+    override open func awakeFromNib() {
         super.awakeFromNib()
         setup()
     }
     
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
-        UIDevice.currentDevice().endGeneratingDeviceOrientationNotifications()
+        NotificationCenter.default.removeObserver(self)
+        UIDevice.current.endGeneratingDeviceOrientationNotifications()
     }
     
     public func setPageIndicatorTintColor(tintColor: UIColor) {
@@ -68,8 +68,7 @@ public class ImageSliderView: UIView {
     }
     
     public func reloadData() {
-        if let numImages = self.dataSource?.numberOfImages()
-             where numImages > 0 {
+        if let numImages = self.dataSource?.numberOfImages(), numImages > 0 {
             // remove all subviews
             self.imageURLArray = (0...numImages-1).filter({
                 self.dataSource?.imageURLFor($0) != nil
@@ -83,19 +82,19 @@ public class ImageSliderView: UIView {
     
     
     private func setup() {
-        self.backgroundColor = UIColor.blackColor()
+        self.backgroundColor = UIColor.black
         createScrollViewIfRequired()
         createPageControlIffRequired()
         reloadData()
-        UIDevice.currentDevice().beginGeneratingDeviceOrientationNotifications()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ImageSliderView.orientationChanged), name: UIDeviceOrientationDidChangeNotification, object: nil)
+        UIDevice.current.beginGeneratingDeviceOrientationNotifications()
+        NotificationCenter.default.addObserver(self, selector: #selector(ImageSliderView.orientationChanged), name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
     }
     
     private func createScrollViewIfRequired() {
         if self.scrollView == nil {
             self.scrollView = UIScrollView()
             self.scrollView?.showsHorizontalScrollIndicator = false
-            self.scrollView?.pagingEnabled = true
+            self.scrollView?.isPagingEnabled = true
             self.scrollView?.delegate = self
             self.addSubview(self.scrollView!)
             self.scrollView!.snp_makeConstraints { (make) -> Void in
@@ -108,10 +107,10 @@ public class ImageSliderView: UIView {
         if self.pageControl == nil {
             self.pageControl = UIPageControl()
             self.pageControl?.hidesForSinglePage = true
-            self.pageControl?.currentPageIndicatorTintColor = UIColor.whiteColor()
-            self.pageControl?.tintColor = UIColor.blackColor()
+            self.pageControl?.currentPageIndicatorTintColor = UIColor.white
+            self.pageControl?.tintColor = UIColor.black
             self.addSubview(self.pageControl!)
-            self.pageControl?.snp_makeConstraints(closure: { (make) in
+            self.pageControl?.snp_makeConstraints({ (make) in
                 make.centerX.equalTo(self.snp_centerX)
                 make.bottom.equalTo(self.snp_bottom).offset(-8)
             })
@@ -122,46 +121,49 @@ public class ImageSliderView: UIView {
         for sv in self.scrollView!.subviews {
             sv.removeFromSuperview()
         }
-        let width = CGRectGetWidth(self.bounds)
-        let height = CGRectGetHeight(self.bounds)
+        let width = self.bounds.width
+        let height = self.bounds.height
         var index = 0
+        
         for imageURL in self.imageURLArray {
-            let imageView = AsyncImageView(frame: CGRectMake(width*CGFloat(index), 0, width, height))
+            let imageView = AsyncImageView(frame: CGRect(x: width*CGFloat(index), y: 0, width: width, height: height))
             imageView.contentMode = viewMode
-            imageView.backgroundColor = UIColor.blackColor()
+            imageView.backgroundColor = UIColor.black
             imageView.showActivityIndicator = true
-            imageView.activityIndicatorColor = UIColor.whiteColor()
-            imageView.activityIndicatorStyle = .White
-            imageView.imageURL = imageURL
-            imageView.userInteractionEnabled = allowFullscreenOnTap
+            imageView.activityIndicatorColor = UIColor.white
+            imageView.activityIndicatorStyle = .white
+            imageView.imageURL = imageURL as URL
+            imageView.isUserInteractionEnabled = allowFullscreenOnTap
             if allowFullscreenOnTap {
                 let tgr = UITapGestureRecognizer(
                     target: self,
-                    action: #selector(ImageSliderView.imageTapped(_:))
+                    action: #selector(ImageSliderView.imageTapped)
                 )
                 imageView.addGestureRecognizer(tgr)
             }
             self.scrollView?.addSubview(imageView)
             index += 1
         }
-        self.scrollView?.contentSize = CGSizeMake(width*CGFloat(self.imageURLArray.count), height)
-        self.scrollView?.contentOffset = CGPointZero
-        self.bringSubviewToFront(self.pageControl!)
+        
+        self.scrollView?.contentSize = CGSize(width: width*CGFloat(self.imageURLArray.count), height: height)
+        self.scrollView?.contentOffset = .zero
+        self.bringSubview(toFront: self.pageControl!)
         self.pageControl?.numberOfPages = self.imageURLArray.count
     }
     
     @objc private func orientationChanged() {
-        if let numImages = self.dataSource?.numberOfImages() where numImages > 0 {
+        if let numImages = self.dataSource?.numberOfImages(), numImages > 0 {
             let imageViews = self.scrollView?.subviews.map{$0 as? AsyncImageView}
-            let width = CGRectGetWidth(self.bounds)
-            let height = CGRectGetHeight(self.bounds)
+            let width = self.bounds.width
+            let height = self.bounds.height
             for index in 0...numImages-1 {
                 if let imageView = imageViews?[index] {
-                    imageView.frame = CGRectMake(width*CGFloat(index), 0, width, height)
+                    imageView.frame = CGRect(x: width*CGFloat(index),y: 0,width: width,height: height)
                 }
             }
-            self.scrollView?.contentSize = CGSizeMake(CGFloat(numImages)*width, height)
-            self.scrollView?.contentOffset = CGPointMake(CGFloat(self.pageControl!.currentPage)*width, 0)
+            
+            self.scrollView?.contentSize = CGSize(width: CGFloat(numImages)*width,height: height)
+            self.scrollView?.contentOffset = CGPoint(x: CGFloat(self.pageControl!.currentPage)*width,y: 0)
         }
     }
     
@@ -171,14 +173,14 @@ public class ImageSliderView: UIView {
             fullScreenController.images = self.imageURLArray
             fullScreenController.font = self.font
             fullScreenController.tintColor = self.tintColor
-            parentVC.presentViewController(fullScreenController, animated: true, completion: { 
+            parentVC.present(fullScreenController, animated: true, completion: {
                 
             })
         }
     }
     
     private func getParentViewController() -> UIViewController? {
-        var topVC = UIApplication.sharedApplication().keyWindow?.rootViewController
+        var topVC = UIApplication.shared.keyWindow?.rootViewController
         while((topVC!.presentedViewController) != nil) {
             topVC = topVC!.presentedViewController
         }
@@ -189,8 +191,8 @@ public class ImageSliderView: UIView {
 }
 
 extension ImageSliderView: UIScrollViewDelegate {
-    public func scrollViewDidScroll(scrollView: UIScrollView) {
-        let width = CGRectGetWidth(self.bounds)
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let width = self.bounds.width
         self.pageControl?.currentPage = Int(scrollView.contentOffset.x/width)
     }
 }

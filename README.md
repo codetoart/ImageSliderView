@@ -8,7 +8,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-* [Swift 2.3](https://swift.org/) - Swift version used
+* [Swift 3.0](https://swift.org/) - Swift version used
 * [Xcode 8](https://developer.apple.com/xcode/) - Xcode version used
 
 ### Installing
@@ -22,7 +22,7 @@ pod 'ImageSliderView', :git => 'git@github.com:codetoart/ImageSliderView.git'
 
 ## Built With
 
-* [Swift 2.3](https://swift.org/) - Swift version used
+* [Swift 3.0](https://swift.org/) - Swift version used
 * [Xcode 8](https://developer.apple.com/xcode/) - Xcode version used
 
 ## Versioning
