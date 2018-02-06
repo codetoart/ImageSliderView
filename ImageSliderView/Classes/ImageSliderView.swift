@@ -11,25 +11,25 @@ import SnapKit
 import AsyncImageView
 
 public protocol ImageSliderViewDelegate: class {
-    func didTapImage(index: Int)
+    func didTapImage(_ index: Int)
 }
 
 public protocol ImageSliderViewDataSource: class {
     func numberOfImages() -> Int?
-    func imageURLFor(index: Int) -> NSURL?
+    func imageURLFor(_ index: Int) -> URL?
 }
 
-public class ImageSliderView: UIView {
+open class ImageSliderView: UIView {
 
-    public var viewMode: UIViewContentMode = .scaleAspectFit
-    public var allowFullscreenOnTap = true
-    public var font: UIFont = UIFont.systemFont(ofSize: 15)
-    public weak var dataSource: ImageSliderViewDataSource?
-    public weak var delegate: ImageSliderViewDelegate?
+    open var viewMode: UIViewContentMode = .scaleAspectFit
+    open var allowFullscreenOnTap = true
+    open var font: UIFont = UIFont.systemFont(ofSize: 15)
+    open weak var dataSource: ImageSliderViewDataSource?
+    open weak var delegate: ImageSliderViewDelegate?
     
-    private var scrollView: UIScrollView?
+    fileprivate var scrollView: UIScrollView?
     fileprivate var pageControl: UIPageControl?
-    private var imageURLArray = Array<NSURL>()
+    fileprivate var imageURLArray = Array<URL>()
     
     /*
     // Only override drawRect: if you perform custom drawing.
@@ -49,7 +49,7 @@ public class ImageSliderView: UIView {
         setup()
     }
     
-    override public func awakeFromNib() {
+    override open func awakeFromNib() {
         super.awakeFromNib()
         setup()
     }
@@ -71,9 +71,9 @@ public class ImageSliderView: UIView {
         if let numImages = self.dataSource?.numberOfImages(), numImages > 0 {
             // remove all subviews
             self.imageURLArray = (0...numImages-1).filter({
-                self.dataSource?.imageURLFor(index: $0) != nil
+                self.dataSource?.imageURLFor($0) != nil
             }).map({
-                self.dataSource!.imageURLFor(index: $0)!
+                self.dataSource!.imageURLFor($0)!
             })
             self.layoutImages()
         }

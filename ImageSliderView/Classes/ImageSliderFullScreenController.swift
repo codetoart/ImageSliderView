@@ -11,7 +11,7 @@ import SnapKit
 
 class ImageSliderFullScreenController: UIViewController {
     
-    var images: Array<NSURL>?
+    var images: Array<URL>?
     var tintColor: UIColor = UIColor.blue
     var font: UIFont = UIFont.systemFont(ofSize: 15)
 
@@ -68,7 +68,7 @@ extension ImageSliderFullScreenController: ImageSliderViewDataSource {
         return self.images?.count
     }
     
-    func imageURLFor(index: Int) -> NSURL? {
+    func imageURLFor(_ index: Int) -> URL? {
         return self.images?[index]
     }
 }
